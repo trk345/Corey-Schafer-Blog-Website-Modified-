@@ -1,0 +1,36 @@
+{%extends 'blog/base.html'%}
+{%block content%}
+<!--        <h1>{{post.title}}</h1>-->
+<!--        <p>By {{post.author}} on {{post.date_posted}}</p>-->
+<!--        <p>{{post.content}}</p>-->
+        <article class="media content-section">
+            <img class = "rounded-circle article-img" src = "{{object.author.profile.image.url}}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                    <a class="mr2 green-link" href="{% url 'category-posts' post.category.id %}">{{ post.category.name }}</a>
+                    <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+                    {% if object.author == user %}
+                        <div>
+                            <a class = "btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'post-update' object.id %}">Update</a>
+                            <a class = "btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'post-delete' object.id %}">Delete</a>
+                        </div>
+
+                    {% endif %}
+                </div>
+                <h2 class="article-title">{{ object.title }}</h2>
+                <p class="article-content">{{ object.content }}</p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="mb-3 img-fluid rounded">
+                {% endif %}
+                <footer class="text-muted">{{ post.views }} views</footer>
+                <p>{{ post.number_of_likes }} likes
+                {% if user in post.likes.all %}
+                <a class="ml-2 pt-2" href="{% url 'blog-like' post.id %}"><span><ion-icon name="heart" style="font-size: 2rem;"></ion-icon></span></a>
+                {% else %}
+                    <a class="ml-2 pt-2" href="{% url 'blog-like' post.id %}"><span><ion-icon name="heart-outline" style="font-size: 2rem;"></ion-icon></span></a>
+                {% endif %}
+                </p>
+            </div>
+        </article>
+{%endblock%}
